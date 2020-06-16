@@ -1,5 +1,4 @@
 import { createElement, PureComponent } from 'react';
-import { isFunction } from 'rxjs/util/isFunction';
 import debug from 'debug';
 import invariant from 'invariant';
 
@@ -37,12 +36,12 @@ export default function contain(options = {}) {
     const name = Component.displayName || 'Anon Component';
     let action;
     let isActionable = false;
-    let hasRefetcher = isFunction(options.shouldRefetch);
-    const getActionArgs = isFunction(options.getActionArgs) ?
+    let hasRefetcher = typeof options.shouldRefetch === 'function';
+    const getActionArgs = typeof options.getActionArgs === 'function' ?
       options.getActionArgs :
       (() => []);
 
-    const isPrimed = isFunction(options.isPrimed) ?
+    const isPrimed = typeof options.isPrimed === 'function' ?
       options.isPrimed :
       (() => false);
 

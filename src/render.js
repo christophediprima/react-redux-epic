@@ -1,5 +1,5 @@
 import { render as _render, unmountComponentAtNode } from 'react-dom';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 // render(
 //   element: ReactElement,
@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 // ) => Observable[RootInstance]
 
 export default function render(element, container) {
-  return Observable.create(observer => {
+  return new Observable(observer => {
     try {
       _render(element, container, function() {
         observer.next();

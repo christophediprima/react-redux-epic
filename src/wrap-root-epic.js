@@ -1,8 +1,5 @@
-import 'rxjs';
 import invariant from 'invariant';
-import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
-import { Subject } from 'rxjs/Subject';
-import { Subscriber } from 'rxjs/Subscriber';
+import { empty, Subject, Subscriber } from 'rxjs';
 import { ActionsObservable, EPIC_END } from 'redux-observable';
 import debug from 'debug';
 
@@ -23,7 +20,7 @@ export default function wrapRootEpic(userEpic) {
     userEpic
   );
   let actionsProxy = new Subject();
-  let lifecycle = EmptyObservable.create();
+  let lifecycle = empty();
   let subscription;
   function observableEpic(_actions, ...rest) {
     actionsProxy = new Subject();

@@ -1,9 +1,9 @@
-import 'rxjs';
 import { isValidElement } from 'react';
 import ReactDOM from 'react-dom/server';
 import invariant from 'invariant';
 import debug from 'debug';
-import { Observable } from 'rxjs/Observable';
+import { defer, Observable } from 'rxjs';
+import { delay, last, map } from 'rxjs/operators';
 
 import {
   $$complete,
@@ -44,15 +44,15 @@ export default function renderToString(element, wrappedEpic) {
     wrappedEpic[$$complete]();
     return wrappedEpic[$$getObservable]();
   }
-  return Observable.defer(initialRender)
+  return defer(initialRender).pipe(
     // allow wrappedEpic[$$complete](); to complete before calling unsubscribe
     // otherwise this could
-    .delay(0)
-    .last(null, null, null)
-    .map(() => {
+    delay(0),
+    last(),
+    map(() => {
       wrappedEpic[$$unsubscribe]();
       log('final app render');
       const markup = ReactDOM.renderToString(element);
       return { markup };
-    });
+    }));
 }
